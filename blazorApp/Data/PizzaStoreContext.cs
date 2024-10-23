@@ -1,12 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace BlazingPizza.Data;
+namespace BlazingPizza;
 
 public class PizzaStoreContext : DbContext
 {
 
-        public PizzaStoreContext(
-            DbContextOptions options) : base(options)
+        public PizzaStoreContext(DbContextOptions options) : base(options)
         {
         }
 

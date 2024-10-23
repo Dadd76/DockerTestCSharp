@@ -18,4 +18,8 @@ dotnet dev-certs https --trust
 ctrl + shift + D
 
 
+dotnet tool install --global dotnet-aspnet-codegenerator
+
+
+
 
