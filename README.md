@@ -24,4 +24,9 @@ dotnet tool install --global dotnet-aspnet-codegenerator
 https://github.com/microsoft/vscode-dev-containers/issues/1625
 
 
+Using Visual Studio Code: If you’re using Visual Studio Code:
 
+Open installSQLtools.sh.
+In the bottom-right corner, you should see either CRLF or LF. Click on it.
+Select LF (Unix format) to change the line endings.
+Save the file.
