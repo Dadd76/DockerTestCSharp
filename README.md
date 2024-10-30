@@ -21,5 +21,7 @@ ctrl + shift + D
 dotnet tool install --global dotnet-aspnet-codegenerator
 
 
+https://github.com/microsoft/vscode-dev-containers/issues/1625
+
 
 
