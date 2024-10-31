@@ -22,9 +22,6 @@ node_modules/
 # Ignore logs
 *.log
 
-# Ignore publish outputs
-wwwroot/
-
 # Ignore temporary files
 *.tmp
 *.temp

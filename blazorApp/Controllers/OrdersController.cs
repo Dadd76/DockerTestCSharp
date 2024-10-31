@@ -29,8 +29,9 @@ public class OrdersController : Controller
     }
 
     [HttpPost]
-    public async Task<ActionResult<int>> PlaceOrder(Order order)
+    public async Task<ActionResult<int>> PlaceOrder([FromBody] Order order)
     {
+         Console.WriteLine("PlaceOrder method invoked"); 
         order.CreatedTime = DateTime.Now;
 
         // Enforce existence of Pizza.SpecialId and Topping.ToppingId
@@ -47,4 +48,15 @@ public class OrdersController : Controller
 
         return order.OrderId;
     }
+
+
+    [HttpPost("test")]
+    public IActionResult TestPost([FromBody] int value)
+    {
+        // Juste pour vérifier que la valeur a bien été reçue
+        Console.WriteLine($"Received integer: {value}");
+
+        // Vous pouvez retourner la valeur pour la tester
+        return Ok(value);
+}
 }

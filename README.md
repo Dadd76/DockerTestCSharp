@@ -2,7 +2,10 @@
 
 # BlazorApp
 
+dotnet new list
 dotnet --list-sdks
+
+
 
 
 https://dotnet.microsoft.com/fr-fr/learn/aspnet/blazor-tutorial/intro

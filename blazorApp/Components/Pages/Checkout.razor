@@ -1,6 +1,7 @@
 ﻿@page "/checkout"
 @using BlazingPizza
 @using BlazingPizza.Services;
+@using System.Text.Json
 @inject OrderState OrderState
 @inject HttpClient HttpClient
 @inject NavigationManager NavigationManager
@@ -58,7 +59,18 @@
 
     async Task PlaceOrder()
     {
+
+        int integerValue = 42;
+
+    // Envoi de la requête POST
+        var response2 = await HttpClient.PostAsJsonAsync(NavigationManager.BaseUri + "orders/test", integerValue);
+
+        OrderState.Order.UserId = "test";
+
         isSubmitting = true;
+        var orderJson = JsonSerializer.Serialize(OrderState.Order);
+        Console.WriteLine($"Order JSON: {orderJson}");
+
         var response = await HttpClient.PostAsJsonAsync(NavigationManager.BaseUri + "orders", OrderState.Order);
         var newOrderId = await response.Content.ReadFromJsonAsync<int>();
         OrderState.ResetOrder();
