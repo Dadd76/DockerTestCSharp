@@ -12,7 +12,7 @@ namespace BlazingPizza
 
         public DateTime CreatedTime { get; set; }
 
-       // public Address DeliveryAddress { get; set; } = new Address();
+        public Address DeliveryAddress { get; set; } = new Address();
 
         public List<Pizza> Pizzas { get; set; } = new List<Pizza>();
 

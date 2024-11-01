@@ -6,6 +6,7 @@
 @inject HttpClient HttpClient
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
+@implements IDisposable
 
 <div class="top-bar">
     <a class="logo" href="">
@@ -27,47 +28,49 @@
     <div class="checkout-cols">
         <div class="checkout-order-details">
             <h4>Review order</h4>
-            @foreach (var pizza in Order.Pizzas)
+            <OrderReview Order="Order" />
+        </div>
+
+        <div class="checkout-delivery-address">
+            <h4>Deliver to...</h4>
+            @if (isError)
             {
-                <p>
-                    <strong>
-                        @(pizza.Size)"
-                        @pizza.Special.Name
-                        (£@pizza.GetFormattedTotalPrice())
-                    </strong>
-                </p>
+                <div class="alert alert-danger">Please enter a name and address.</div>
             }
 
-            <p>
-                <strong>
-                    Total price:
-                    £@Order.GetFormattedTotalPrice()
-                </strong>
-            </p>
+           <EditForm Model=Order.DeliveryAddress OnValidSubmit=PlaceOrder OnInvalidSubmit=ShowError> 
+                <AddressEditor Address="Order.DeliveryAddress" />
+                @* <ValidationSummary /> *@
+                <DataAnnotationsValidator />
+            </EditForm>
+
+
         </div>
     </div>
 
-    <button class="checkout-button btn btn-warning" @onclick="PlaceOrder" disabled=@isSubmitting>
+    <button class="checkout-button btn btn-warning" type="Submit" disabled=@isError>
         Place order
     </button>
 </div>
 
 @code {
+    private EditContext editContext;
     Order Order => OrderState.Order;
 
     bool isSubmitting;
-
+    bool isError = false;
     async Task PlaceOrder()
     {
 
         int integerValue = 42;
 
-    // Envoi de la requête POST
+        // Envoi de la requête POST
         var response2 = await HttpClient.PostAsJsonAsync(NavigationManager.BaseUri + "orders/test", integerValue);
 
         OrderState.Order.UserId = "test";
 
-        isSubmitting = true;
+        @* isError = false;
+        isSubmitting = true; *@
         var orderJson = JsonSerializer.Serialize(OrderState.Order);
         Console.WriteLine($"Order JSON: {orderJson}");
 
@@ -76,4 +79,39 @@
         OrderState.ResetOrder();
         NavigationManager.NavigateTo("/myorders");
     }
+
+    protected void ShowError()
+    {
+        isError = true;
+    }     
+
+    protected override void OnInitialized()
+    {
+    editContext = new(Order.DeliveryAddress);
+    editContext.OnFieldChanged += HandleFieldChanged;
+    }    
+
+    private void HandleFieldChanged(object sender, FieldChangedEventArgs e)
+    {
+        isError = !editContext.Validate();
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        editContext.OnFieldChanged -= HandleFieldChanged;
+    }
+    @* private async Task CheckSubmission(EditContext editContext)
+    {
+        isSubmitting = true;
+        var model = editContext.Model as Address;
+        isError = string.IsNullOrWhiteSpace(model?.Name)
+        || string.IsNullOrWhiteSpace(model?.Line1)
+        || string.IsNullOrWhiteSpace(model?.PostalCode);
+        if (!isError)
+        {
+            await PlaceOrder();
+        }
+        isSubmitting = false;
+    } *@
 }

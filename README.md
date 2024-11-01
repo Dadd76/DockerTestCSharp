@@ -2,6 +2,9 @@
 
 # BlazorApp
 
+https://learn.microsoft.com/fr-fr/training/browse/?products=blazor&expanded=dotnet
+
+
 dotnet new list
 dotnet --list-sdks
 

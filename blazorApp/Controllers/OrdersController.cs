@@ -44,7 +44,16 @@ public class OrdersController : Controller
         }
 
         _db.Orders.Attach(order);
-        await _db.SaveChangesAsync();
+        
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+        {
+            Console.WriteLine($"An error occurred while saving the order: {ex.Message}");
+            return StatusCode(500, "An error occurred while saving the order.");
+        }
 
         return order.OrderId;
     }
