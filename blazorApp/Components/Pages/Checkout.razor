@@ -8,23 +8,9 @@
 @rendermode InteractiveServer
 @implements IDisposable
 
-<div class="top-bar">
-    <a class="logo" href="">
-        <img src="img/logo.svg" />
-    </a>
-
-    <NavLink href="" class="nav-tab" Match="NavLinkMatch.All">
-        <img src="img/pizza-slice.svg" />
-        <div>Get Pizza</div>
-    </NavLink>
-
-    <NavLink href="myorders" class="nav-tab">
-        <img src="img/bike.svg" />
-        <div>My Orders</div>
-    </NavLink>
-</div>
 
 <div class="main">
+             <EditForm Model=Order.DeliveryAddress OnValidSubmit=PlaceOrder OnInvalidSubmit=ShowError> 
     <div class="checkout-cols">
         <div class="checkout-order-details">
             <h4>Review order</h4>
@@ -38,19 +24,20 @@
                 <div class="alert alert-danger">Please enter a name and address.</div>
             }
 
-           <EditForm Model=Order.DeliveryAddress OnValidSubmit=PlaceOrder OnInvalidSubmit=ShowError> 
+   
                 <AddressEditor Address="Order.DeliveryAddress" />
                 @* <ValidationSummary /> *@
                 <DataAnnotationsValidator />
-            </EditForm>
+           
 
 
         </div>
     </div>
 
-    <button class="checkout-button btn btn-warning" type="Submit" disabled=@isError>
+   <button class="checkout-button btn btn-warning" type="Submit" disabled=@isError>
         Place order
     </button>
+     </EditForm>
 </div>
 
 @code {

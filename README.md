@@ -4,7 +4,7 @@
 
 https://learn.microsoft.com/fr-fr/training/browse/?products=blazor&expanded=dotnet
 
-
+https://github.com/dotnet-presentations/blazor-workshop/
 dotnet new list
 dotnet --list-sdks
 
