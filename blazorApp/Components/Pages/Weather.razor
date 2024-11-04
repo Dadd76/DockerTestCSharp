@@ -1,5 +1,7 @@
 ﻿@page "/weather"
 @attribute [StreamRendering]
+@using blazorApp.Components.Layout
+@layout OtherLayout
 
 <PageTitle>Weather</PageTitle>
 
@@ -13,6 +15,7 @@
 }
 else
 {
+    <p>
     <table class="table">
         <thead>
             <tr>
@@ -34,6 +37,7 @@ else
             }
         </tbody>
     </table>
+    </p>
 }
 
 @code {
