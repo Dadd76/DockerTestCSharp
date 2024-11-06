@@ -10,7 +10,7 @@
 
 
 <div class="main">
-             <EditForm Model=Order.DeliveryAddress OnValidSubmit=PlaceOrder OnInvalidSubmit=ShowError> 
+    <EditForm Model=Order.DeliveryAddress OnValidSubmit=PlaceOrder OnInvalidSubmit=ShowError> 
     <div class="checkout-cols">
         <div class="checkout-order-details">
             <h4>Review order</h4>
@@ -23,14 +23,9 @@
             {
                 <div class="alert alert-danger">Please enter a name and address.</div>
             }
-
-   
                 <AddressEditor Address="Order.DeliveryAddress" />
                 @* <ValidationSummary /> *@
                 <DataAnnotationsValidator />
-           
-
-
         </div>
     </div>
 
@@ -64,7 +59,7 @@
         var response = await HttpClient.PostAsJsonAsync(NavigationManager.BaseUri + "orders", OrderState.Order);
         var newOrderId = await response.Content.ReadFromJsonAsync<int>();
         OrderState.ResetOrder();
-        NavigationManager.NavigateTo("/myorders");
+        NavigationManager.NavigateTo($"myorders/{newOrderId}");
     }
 
     protected void ShowError()
