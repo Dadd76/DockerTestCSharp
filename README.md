@@ -55,8 +55,16 @@ docker ps
 //lancer un bash sur le conteneur 
 docker exec -it c8e754d9db75 bash
 
+docker inspect c8e754d9db75 --> voir la config 
+docker log c8e754d9db75 --> voir les logs
+docker stop c8e754d9db75 ---> arréter le conteneur
+docker start c8e754d9db75 ---> démarrer le conteneur 
+
 //Host ASP.NET Core on Linux with Nginx
 https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-9.0&tabs=linux-ubuntu
+
+
+//Docker compose
 
 
 
