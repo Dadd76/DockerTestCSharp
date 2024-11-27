@@ -14,10 +14,10 @@ RUN apt-get update && \
 RUN dotnet tool install --global dotnet-ef \
     && export PATH="$PATH:/root/.dotnet/tools"
 
-RUN  dotnet tool update --global dotnet-ef
+# RUN  dotnet tool update --global dotnet-ef
 
     # Ajouter le package Microsoft.EntityFrameworkCore.Design au projet
-RUN dotnet add package Microsoft.EntityFrameworkCore.Design
+# RUN dotnet add package Microsoft.EntityFrameworkCore.Design
 
 # [Optional] Uncomment this section to install additional OS packages.
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \

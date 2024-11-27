@@ -2,6 +2,7 @@ using blazorApp.Components;
 using BlazingPizza.Data;
 using BlazingPizza.Services;
 using BlazingPizza;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,9 +16,18 @@ builder.Services.AddRazorComponents()
 //AddHttpClient permet à l’application d’accéder aux commandes HTTP. L’application utilise un HttpClient pour obtenir le JSON pour les pizzas spéciales
 builder.Services.AddHttpClient(); 
 
+// Récupérer la chaîne de connexion depuis appsettings.json
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// Configure le DbContext pour utiliser SQL Server
+builder.Services.AddDbContext<PizzaStoreContext>(options => options.UseSqlServer(connectionString));
+
 // inscrit le nouveau PizzaStoreContext et fournit le nom de fichier de la base de données SQLite
-builder.Services.AddSqlite<PizzaStoreContext>("Data Source=pizza.db");
+// builder.Services.AddSqlite<PizzaStoreContext>("Data Source=pizza.db");
+
+
 builder.Services.AddSingleton<PizzaService>();
+
+
 builder.Services.AddControllers(); 
 
 builder.Services.AddScoped<OrderState>();

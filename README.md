@@ -1,5 +1,9 @@
 # DockerTestCSharp
 
+--> devcontainer.json
+The Visual Studio Code Dev Containers extension lets you use a Docker container as a full-featured development environment. It allows you to open any folder or repository inside a container and take advantage of Visual Studio Code's full feature set. A devcontainer.json file in your project tells VS Code how to access (or create) a development container with a well-defined tool and runtime stack. This container can be used to run an application or to provide separate tools, libraries, or runtimes needed for working with a codebase.
+
+
 # BlazorApp
 
 https://learn.microsoft.com/fr-fr/training/browse/?products=blazor&expanded=dotnet
@@ -29,6 +33,8 @@ In the bottom-right corner, you should see either CRLF or LF. Click on it.
 Select LF (Unix format) to change the line endings.
 Save the file.
 
+
+\\wsl.localhost\docker-desktop\mnt\docker-desktop-disk\data\docker\volumes\
 
 # Docker
 https://www.youtube.com/watch?v=0v3JXxuyF7Y
@@ -65,6 +71,15 @@ https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=a
 
 
 //Docker compose
+
+
+#serveur SQL ODBC Driver 18
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P P@ssw0rd -C
+
+
+
+//
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
 
 
 
