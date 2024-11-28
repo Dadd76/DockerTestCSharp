@@ -5,7 +5,9 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
-
+      environment:
+        ConnectionStrings__DefaultConnection : "Server=localhost,1433;Database=PizzaDatabase;User=sa;Password=${DB_PASSWORD};Encrypt=True;TrustServerCertificate=True;"
+        ASPNETCORE_ENVIRONMENT: Development
     volumes:
       - ../..:/workspaces:cached
 
@@ -25,7 +27,7 @@ services:
     image: mcr.microsoft.com/mssql/server:2019-latest
     restart: unless-stopped
     environment:
-      SA_PASSWORD: P@ssw0rd
+      SA_PASSWORD:  "${DB_PASSWORD}"
       ACCEPT_EULA: Y
 
     # Add "forwardPorts": ["db:1433"] to **devcontainer.json** to forward MSSQL locally.

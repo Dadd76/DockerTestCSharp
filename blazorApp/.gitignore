@@ -25,3 +25,4 @@ node_modules/
 # Ignore temporary files
 *.tmp
 *.temp
+*.env

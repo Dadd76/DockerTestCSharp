@@ -82,4 +82,67 @@ https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=a
 dotnet add package Microsoft.EntityFrameworkCore.SqlServer
 
 
+1. Comment cela fonctionne ?
+Lorsque .NET charge la configuration, il combine les différentes sources de configuration dans l’ordre suivant (par défaut) :
+
+appsettings.json : valeurs définies dans le fichier.
+appsettings.{Environment}.json : valeurs spécifiques à un environnement (par exemple, appsettings.Production.json).
+Variables d’environnement : elles remplacent les clés correspondantes des fichiers JSON.
+Arguments en ligne de commande : ils ont la priorité absolue.
+Ainsi, la chaîne de connexion définie dans ConnectionStrings__DefaultConnection via les variables d’environnement dans docker-compose.yml écrasera la valeur correspondante dans appsettings.json, si les clés sont identiques.
+
+2. Vérification de la clé utilisée
+Dans ton fichier appsettings.json, la clé pour la chaîne de connexion est probablement définie ainsi :
+
+json
+Copier le code
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=PizzaDatabase;Trusted_Connection=True;MultipleActiveResultSets=true"
+  }
+}
+Dans ton docker-compose.yml, tu utilises la clé ConnectionStrings__DefaultConnection. Cette syntaxe avec __ (double underscore) est interprétée par .NET pour cibler des sous-sections de configuration. Ainsi, ta configuration sera remplacée correctement.
+
+3. Configuration dans le code
+Pour t’assurer que ta configuration utilise bien les variables d’environnement, ton application doit inclure la méthode AddEnvironmentVariables dans le pipeline de configuration, ce qui est souvent le cas par défaut dans les applications .NET modernes.
+
+Dans Program.cs (ou Startup.cs si tu utilises une version plus ancienne), vérifie que cela est présent :
+
+csharp
+Copier le code
+var builder = WebApplication.CreateBuilder(args);
+
+// Ajoute automatiquement les variables d'environnement à la configuration
+builder.Configuration.AddEnvironmentVariables();
+
+var app = builder.Build();
+4. Comment vérifier que cela fonctionne ?
+Tu peux vérifier que la chaîne de connexion finale utilisée par ton application est celle définie dans les variables d’environnement.
+
+Ajoute un log dans Program.cs pour inspecter la chaîne de connexion chargée :
+
+csharp
+Copier le code
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+Console.WriteLine($"Final connection string: {connectionString}");
+Lorsque tu démarres le conteneur, la sortie devrait afficher la chaîne définie dans docker-compose.yml.
+
+5. Précautions
+Ne laisse pas de mots de passe en clair dans appsettings.json. Si quelqu’un l’examine, il pourrait obtenir des informations sensibles.
+Si tu utilises une chaîne de connexion avec un placeholder pour le mot de passe dans appsettings.json, comme ceci :
+json
+Copier le code
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost,1433;Database=PizzaDatabase;User=sa;Password=;Encrypt=True;TrustServerCertificate=True;"
+  }
+}
+La variable d’environnement remplacera entièrement cette valeur au moment de l’exécution.
+6. Résumé
+Oui, ta chaîne définie dans docker-compose.yml remplacera celle d’appsettings.json si tout est configuré correctement.
+Ajoute AddEnvironmentVariables dans ton code si ce n’est pas déjà fait.
+Vérifie avec un log ou un débogueur que la configuration finale utilisée est correcte.
+Cette approche garantit que ta chaîne de connexion est sécurisée et configurable pour différents environnements sans modifier le code ou les fichiers sensibles.
+
+
 

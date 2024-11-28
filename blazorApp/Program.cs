@@ -5,6 +5,9 @@ using BlazingPizza;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+// Ajouter les variables d'environnement
+builder.Configuration.AddEnvironmentVariables();
+
 
 builder.Logging.AddConsole();
 builder.Logging.SetMinimumLevel(LogLevel.Debug);
@@ -15,6 +18,8 @@ builder.Services.AddRazorComponents()
 
 //AddHttpClient permet à l’application d’accéder aux commandes HTTP. L’application utilise un HttpClient pour obtenir le JSON pour les pizzas spéciales
 builder.Services.AddHttpClient(); 
+
+//var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
 
 // Récupérer la chaîne de connexion depuis appsettings.json
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
