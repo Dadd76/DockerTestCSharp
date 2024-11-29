@@ -5,11 +5,12 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
-      environment:
-        ConnectionStrings__DefaultConnection : "Server=localhost,1433;Database=PizzaDatabase;User=sa;Password=${DB_PASSWORD};Encrypt=True;TrustServerCertificate=True;"
-        ASPNETCORE_ENVIRONMENT: Development
+    
     volumes:
       - ../..:/workspaces:cached
+    environment:
+      ConnectionStrings__DefaultConnection : "Server=localhost,1433;Database=PizzaDatabase;User=sa;Password=${DB_PASSWORD};Encrypt=True;TrustServerCertificate=True;"
+      ASPNETCORE_ENVIRONMENT: Development
 
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
