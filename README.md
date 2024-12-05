@@ -43,6 +43,8 @@ In the bottom-right corner, you should see either CRLF or LF. Click on it.
 Select LF (Unix format) to change the line endings.
 Save the file.
 
+git config --global core.autocrlf false
+
 #### Docker ####
 
 # Documentation / Tuto
