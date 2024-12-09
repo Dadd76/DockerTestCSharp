@@ -55,7 +55,7 @@ https://www.youtube.com/watch?v=0v3JXxuyF7Y
 
 # commande Docker
   //dans le dossier du dockerFile
-  docker build -t moncimagedocker
+  docker build -t monimagedocker
 
   //lister les images 
   docker image ls
@@ -93,6 +93,8 @@ https://www.youtube.com/watch?v=0v3JXxuyF7Y
   // build conteneur
   docker compose up -d --build
   docker compose up --build
+
+  docker-compose build --progress=plain
 
   // exécuter un bash sur un conteneur distant 
   docker exec -it c8e754d9db75 bash

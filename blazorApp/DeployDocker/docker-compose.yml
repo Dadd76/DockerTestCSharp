@@ -1,0 +1,30 @@
+services:
+  app:
+    image: votre_nom_image_app:latest
+    build:
+      context: ..
+      dockerfile: DeployDocker/Dockerfile
+    depends_on:
+      - db
+    ports:
+      - "5000:5000" # Redirige le port 5000 pour accéder à l'application
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=db;Database=PizzaDatabase;User=sa;Password=${DB_PASSWORD};Encrypt=True;TrustServerCertificate=True;"
+      ASPNETCORE_ENVIRONMENT: Production
+    networks:
+      - app_network
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: unless-stopped
+    environment:
+      SA_PASSWORD: "${DB_PASSWORD}"
+      ACCEPT_EULA: Y
+    ports:
+      - "1433:1433" # Optionnel, expose la base de données pour débogage ou accès externe
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
