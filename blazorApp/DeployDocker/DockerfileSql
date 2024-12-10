@@ -1,0 +1,26 @@
+# Étape 1: Utilisation de l'image .NET SDK pour la construction de l'application
+FROM mcr.microsoft.com/mssql/server:2019-latest AS build
+
+
+ENV PATH=$PATH:/opt/mssql-tools18/bin
+# Étape 1 : Utiliser l'image officielle de SQL Server
+FROM mcr.microsoft.com/mssql/server:2019-latest
+
+# Étape 2 : Définir les variables d'environnement avec des valeurs par défaut (remplacées au runtime)
+ARG SA_PASSWORD
+
+ENV ACCEPT_EULA=Y
+ENV SA_PASSWORD=${DB_PASSWORD}
+
+# Étape 3 : Définir le répertoire de travail
+WORKDIR /scripts
+
+# Étape 4 : Copier les scripts SQL dans l'image Docker
+COPY init.sql /scripts/init.sql
+
+# Étape 5 : Exposer le port SQL Server (1433)
+EXPOSE 1433
+
+# Étape 6 : Configurer une commande pour démarrer SQL Server et exécuter le script
+CMD /bin/bash -c "/opt/mssql/bin/sqlservr & sleep 15 && /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $SA_PASSWORD -i /scripts/init.sql && wait"
+# Install SQL Tools: SQLPackage and sqlcmd

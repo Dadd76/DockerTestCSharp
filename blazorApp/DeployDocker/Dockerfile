@@ -1,6 +1,5 @@
 # Étape 1: Utilisation de l'image .NET SDK pour la construction de l'application
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-
 # Définir le répertoire de travail dans le conteneur
 WORKDIR /app
 
@@ -16,7 +15,14 @@ RUN dotnet publish -c Release -o /app/publish
 
 # Étape 2 : Runtime pour exécuter l'application
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+
 WORKDIR /app
+
+# Install SQL Tools: SQLPackage and sqlcmd
+# COPY DeployDocker/mssql/installSQLtools.sh installSQLtools.sh
+# RUN bash ./installSQLtools.sh \
+#      && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts
+
 
 # Copie les fichiers compilés depuis l'étape de build
 COPY --from=build /app/publish .

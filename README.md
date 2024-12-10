@@ -93,7 +93,10 @@ https://www.youtube.com/watch?v=0v3JXxuyF7Y
   // build conteneur
   docker compose up -d --build
   docker compose up --build
+  docker compose --env-file secret.env build
+  docker compose --env-file secret.env build --progress=plain --no-cache
 
+docker compose build --no-cache && docker compose up
   docker-compose build --progress=plain
 
   // exécuter un bash sur un conteneur distant 
@@ -110,8 +113,21 @@ The Visual Studio Code Dev Containers extension lets you use a Docker container 
 https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-9.0&tabs=linux-ubuntu
 
 #### serveur SQL ODBC ####
-/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P P@ssw0rd -C
+
+Docker exec -it <nom_du_conteneur> bash
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P P@ssw0rd -c
+
+docker exec -it <db_container_name> /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P P@ssw0rd
+
+#test du serveur sql 
+docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=P@ssw0rd' -p 1433:1433 --name test-mssql -d mcr.microsoft.com/mssql/server:2019-latest
+docker stop test-mssql
+docker stop test-mssql
+
+
 #serveur SQL ODBC Driver 18
+
+
 
 #### gestion des mots de passe ####
 1. Comment cela fonctionne ?
