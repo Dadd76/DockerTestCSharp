@@ -9,7 +9,7 @@ services:
     ports:
       - "5000:5000" # Redirige le port 5000 pour accéder à l'application
     environment:
-      ConnectionStrings__DefaultConnection: "Server=db;Database=PizzaDatabase;User=sa;Password=${DB_PASSWORD};Encrypt=True;TrustServerCertificate=True;"
+      ConnectionStrings__DefaultConnection: "Server=db;Database=PizzaDatabase;User=sa;Password=P@ssw0rd123!;Encrypt=True;TrustServerCertificate=True;"
       ASPNETCORE_ENVIRONMENT: Production
     env_file:
       - secret.env
@@ -19,18 +19,14 @@ services:
 
   db:
     image: sql:2019-latest
-    build:
-      context: ..
-      dockerfile: DeployDocker/DockerfileSql
-    # restart: unless-stopped
     environment:
-      # SA_PASSWORD: P@ssw0rd
-      # ACCEPT_EULA: Y
+      SA_PASSWORD: P@ssw0rd123!
+      ACCEPT_EULA: Y
       MSSQL_LOGLEVEL: 4
     env_file:
       - secret.env
-    volumes:
-      - db_data:/var/opt/mssql
+    # volumes:
+    #   - db_data:/var/opt/mssql
     ports:
       - "1433:1433" # Optionnel, expose la base de données pour débogage ou accès externe
     networks:

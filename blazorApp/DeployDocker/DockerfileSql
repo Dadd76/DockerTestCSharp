@@ -1,26 +1,37 @@
-# Étape 1: Utilisation de l'image .NET SDK pour la construction de l'application
-FROM mcr.microsoft.com/mssql/server:2019-latest AS build
 
-
-ENV PATH=$PATH:/opt/mssql-tools18/bin
 # Étape 1 : Utiliser l'image officielle de SQL Server
 FROM mcr.microsoft.com/mssql/server:2019-latest
+
+USER root
+RUN apt-get update && \
+    apt-get install -y curl apt-transport-https gnupg && \
+    curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
+    curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
+    apt-get update && \
+    ACCEPT_EULA=Y apt-get install -y mssql-tools unixodbc-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Étape 2 : Définir les variables d'environnement avec des valeurs par défaut (remplacées au runtime)
 ARG SA_PASSWORD
 
+ENV PATH=$PATH:/opt/mssql-tools18/bin
 ENV ACCEPT_EULA=Y
-ENV SA_PASSWORD=${DB_PASSWORD}
+ENV SA_PASSWORD=P@ssw0rd123!
 
 # Étape 3 : Définir le répertoire de travail
 WORKDIR /scripts
 
 # Étape 4 : Copier les scripts SQL dans l'image Docker
-COPY init.sql /scripts/init.sql
+COPY DeployDocker/scripts/initSql.sql /scripts/init.sql
 
 # Étape 5 : Exposer le port SQL Server (1433)
 EXPOSE 1433
 
-# Étape 6 : Configurer une commande pour démarrer SQL Server et exécuter le script
-CMD /bin/bash -c "/opt/mssql/bin/sqlservr & sleep 15 && /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $SA_PASSWORD -i /scripts/init.sql && wait"
-# Install SQL Tools: SQLPackage and sqlcmd
+# Étape 6 : Script d'initialisation SQL (découplé du démarrage du service)
+COPY DeployDocker/scripts/entrypoint.sh /scripts/entrypoint.sh
+USER root
+RUN chmod +x /scripts/entrypoint.sh
+
+# Étape 7 : Définir le point d'entrée pour démarrer SQL Server et exécuter le script
+ENTRYPOINT ["/bin/bash", "/scripts/entrypoint.sh"]
