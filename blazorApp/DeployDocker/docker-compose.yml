@@ -7,7 +7,7 @@ services:
     depends_on:
       - db
     ports:
-      - "5000:5000" # Redirige le port 5000 pour accéder à l'application
+      - "5000:8080" # Redirige le port 5000 pour accéder à l'application
     environment:
       ConnectionStrings__DefaultConnection: "Server=db;Database=PizzaDatabase;User=sa;Password=P@ssw0rd123!;Encrypt=True;TrustServerCertificate=True;"
       ASPNETCORE_ENVIRONMENT: Production
@@ -18,7 +18,7 @@ services:
     command: ["printenv"]
 
   db:
-    image: sql:2019-latest
+    image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
       SA_PASSWORD: P@ssw0rd123!
       ACCEPT_EULA: Y

@@ -7,6 +7,7 @@
 @inject OrderState OrderState
 @rendermode InteractiveServer
 @inject IJSRuntime JavaScript
+@inject IHttpClientFactory HttpClientFactory
 
 
 @* <div class="top-bar">
@@ -96,8 +97,22 @@
     //BlazingPizza.Pizza configuringPizza;
     protected override async Task OnInitializedAsync()
     {
+        Console.WriteLine("OnInitializedAsync : " + NavigationManager.BaseUri + " specials");
+        var httpClient = HttpClientFactory.CreateClient("MyController");
 
-        specials = await HttpClient.GetFromJsonAsync<List<PizzaSpecial>>(NavigationManager.BaseUri + "specials");
+        try
+        {
+
+         specials = await httpClient.GetFromJsonAsync<List<PizzaSpecial>>("specials");
+            //specials = await HttpClient.GetFromJsonAsync<List<PizzaSpecial>>("/specials");
+          //  specials = await HttpClient.GetFromJsonAsync<List<PizzaSpecial>>("http://host.docker.internal:8080/specials");
+              //  specials = await HttpClient.GetFromJsonAsync<List<PizzaSpecial>>("http://app:8080/specials");
+            
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching specials: {ex.Message}");
+        }
     }
 
     async Task RemovePizzaConfirmation(BlazingPizza.Pizza removePizza)
