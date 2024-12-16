@@ -14,7 +14,8 @@ services:
     env_file:
       - secret.env
     networks:
-      - app_network
+      - front_network
+      - back_network
     command: ["printenv"]
 
   db:
@@ -30,9 +31,9 @@ services:
     ports:
       - "1433:1433" # Optionnel, expose la base de données pour débogage ou accès externe
     networks:
-      - app_network
+      -  back_network
     # command: ["/bin/bash", "-c", "printenv && sleep infinity"]
 
 networks:
-  app_network:
+  front_network:
     driver: bridge

@@ -1,6 +1,7 @@
 ﻿@page "/myorders"
 @inject HttpClient HttpClient
 @inject NavigationManager NavigationManager
+@inject IHttpClientFactory HttpClientFactory
 @using BlazingPizza
 
 
@@ -49,11 +50,17 @@
 </div>
 
 @code {
-    List<OrderWithStatus> ordersWithStatus = new List<OrderWithStatus>();
+    List<OrderWithStatus> ordersWithStatus;
+
+    HttpClient httpClient;
+
+    protected override async Task OnInitializedAsync()
+    {
+        httpClient = HttpClientFactory.CreateClient("MyController");
+    }
 
     protected override async Task OnParametersSetAsync()
     {
-      ordersWithStatus = await HttpClient.GetFromJsonAsync<List<OrderWithStatus>>(
-          $"{NavigationManager.BaseUri}orders");
+      ordersWithStatus = await httpClient.GetFromJsonAsync<List<OrderWithStatus>>("orders");
     }
 }
