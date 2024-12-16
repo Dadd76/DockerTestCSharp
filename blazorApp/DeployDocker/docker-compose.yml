@@ -37,3 +37,6 @@ services:
 networks:
   front_network:
     driver: bridge
+  back_network:
+    driver: bridge
+    
