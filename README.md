@@ -127,6 +127,7 @@ docker stop test-mssql
 
 #serveur SQL ODBC Driver 18
 
+https://learn.microsoft.com/fr-fr/sql/linux/quickstart-install-connect-docker?view=sql-server-ver16&tabs=cli&pivots=cs1-bash
 
 
 #### gestion des mots de passe ####
