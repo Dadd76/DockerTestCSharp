@@ -9,7 +9,7 @@ services:
     volumes:
       - ../..:/workspaces:cached
     environment:
-      ConnectionStrings__DefaultConnection : "Server=localhost,1433;Database=PizzaDatabase;User=sa;Password=${DB_PASSWORD};Encrypt=True;TrustServerCertificate=True;"
+      ConnectionStrings__DefaultConnection : "Server=localhost,1433;Database=PizzaDatabase;User=sa;Password=P@ssw0rd;Encrypt=True;TrustServerCertificate=True;"
       ASPNETCORE_ENVIRONMENT: Development
 
     # Overrides default command so things don't shut down after the process ends.
@@ -28,7 +28,7 @@ services:
     image: mcr.microsoft.com/mssql/server:2019-latest
     restart: unless-stopped
     environment:
-      SA_PASSWORD:  "${DB_PASSWORD}"
+      SA_PASSWORD: P@ssw0rd
       ACCEPT_EULA: Y
     # networks : dockertestcsharp_dev
     # Add "forwardPorts": ["db:1433"] to **devcontainer.json** to forward MSSQL locally.
