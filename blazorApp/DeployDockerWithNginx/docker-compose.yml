@@ -10,8 +10,8 @@ services:
       dockerfile: DeployDockerWithNginx/Dockerfile
     depends_on:
       - db
-    ports:
-      - "5000:8080" # Redirige le port 5000 pour accéder à l'application   
+    # ports:
+    #   - "5000:8080" # Redirige le port 5000 pour accéder à l'application   
     environment:
       ConnectionStrings__DefaultConnection: "Server=db;Database=PizzaDatabase;User=sa;Password=P@ssw0rd123!;Encrypt=True;TrustServerCertificate=True;"
       ASPNETCORE_ENVIRONMENT: Production
@@ -30,8 +30,8 @@ services:
       dockerfile: DeployDockerWithNginx/Dockerfile
     depends_on:
       - db
-    ports:
-      - "5000:8080" # Redirige le port 5000 pour accéder à l'application
+    # ports:
+    #   - "5000:8080" # Redirige le port 5000 pour accéder à l'application
     environment:
       ConnectionStrings__DefaultConnection: "Server=db;Database=PizzaDatabase;User=sa;Password=P@ssw0rd123!;Encrypt=True;TrustServerCertificate=True;"
       ASPNETCORE_ENVIRONMENT: Production
@@ -60,12 +60,13 @@ services:
     # command: ["/bin/bash", "-c", "printenv && sleep infinity"]
 
   nginx:
-    image: nginx:latest
+    image: nginx:1.27
     volumes:
-      - ./nginx/core.conf:/etc/nginx/conf.d/core.conf
-      - ./nginx/proxy.conf:/etc/nginx/conf.d/proxy.conf
-      - ./nginx/blazzorApp1.conf:/etc/nginx/conf.d/blazzorApp1.conf
-      - ./nginx/blazzorApp2.conf:/etc/nginx/conf.d/blazzorApp2.conf
+      # -  ../..:/workspaces:cached
+      - nginx:/etc/nginx
+    #   - ./nginx/proxy.conf:/etc/nginx/conf.d/proxy.conf
+    #   - ./nginx/blazzorApp1.conf:/etc/nginx/conf.d/blazzorApp1.conf
+    #   - ./nginx/blazzorApp2.conf:/etc/nginx/conf.d/blazzorApp2.conf
     ports:
       - "80:80"   # HTTP
       - "443:443" # HTTPS
@@ -79,3 +80,6 @@ networks:
     driver: bridge
   back_network:
     driver: bridge
+
+volumes:
+  nginx:

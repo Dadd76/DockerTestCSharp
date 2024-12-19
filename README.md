@@ -52,7 +52,7 @@ https://www.youtube.com/watch?v=0v3JXxuyF7Y
 
 # volume mapp sous windows
 \\wsl.localhost\docker-desktop\mnt\docker-desktop-disk\data\docker\volumes\
-
+\\wsl.localhost\docker-desktop\mnt\docker-desktop-disk\data\docker\volumes\DockerTestCSharp-cab16d7d7fbfe764c9b4643aa2dc40298734549aac415fecc7cae82c6d4b126d\_data\DockerTestCSharp
 # commande Docker
   //dans le dossier du dockerFile
   docker build -t monimagedocker
@@ -195,6 +195,9 @@ Cette approche garantit que ta chaîne de connexion est sécurisée et configura
 
 ##### ping ####
 apt-get update && apt-get install -y iputils-ping
+
+##### nginx test
+docker run -d  -p 8880:80 nginx:alpine
 
 
 
