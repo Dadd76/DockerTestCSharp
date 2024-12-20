@@ -45,10 +45,19 @@ var app = builder.Build();
 
 // Initialize the database
 var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
+
+if (app.Environment.IsDevelopment())
+{
+    Environment.SetEnvironmentVariable("INIT_DB","true");
+}
+
+var initDb = Environment.GetEnvironmentVariable("INIT_DB");
+
 using (var scope = scopeFactory.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<PizzaStoreContext>();
-    if (db.Database.EnsureCreated())
+
+    if (db.Database.EnsureCreated() && initDb?.ToLower() == "true")
     {
         SeedData.Initialize(db);
     }
@@ -57,9 +66,15 @@ using (var scope = scopeFactory.CreateScope())
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
+    Console.WriteLine("Production !!");
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+}
+else 
+{
+    Console.WriteLine("Développement !!");
+
 }
 
 

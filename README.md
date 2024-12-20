@@ -10,6 +10,8 @@
  
   https://dotnet.microsoft.com/fr-fr/learn/aspnet/blazor-tutorial/intro
 
+dotnet run --environment Staging
+
   # lister les sdk dotnet
   dotnet new list
   dotnet --list-sdks
@@ -95,13 +97,18 @@ https://www.youtube.com/watch?v=0v3JXxuyF7Y
   docker compose up --build
   docker compose --env-file secret.env build
   docker compose --env-file secret.env build --progress=plain --no-cache
-
+docker-compose up -d --force-recreate
 docker compose build --no-cache && docker compose up
   docker-compose build --progress=plain
 
   // exécuter un bash sur un conteneur distant 
   docker exec -it c8e754d9db75 bash
   docker exec -it --user root 9582dbfbc941 bash
+
+
+//volume 
+ docker volume ls
+ docker inspect deploydockerwithnginx_nginx
 
 #### Docker dev environement ####
 
@@ -111,6 +118,9 @@ The Visual Studio Code Dev Containers extension lets you use a Docker container 
 #### Nginx ####
 //Host ASP.NET Core on Linux with Nginx
 https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-9.0&tabs=linux-ubuntu
+
+/usr/share/nginx/html
+\\wsl.localhost\docker-desktop\mnt\host\wsl\docker-desktop\shared-sockets\guest-services
 
 #### serveur SQL ODBC ####
 

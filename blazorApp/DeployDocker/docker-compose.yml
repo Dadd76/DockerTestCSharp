@@ -7,10 +7,11 @@ services:
     depends_on:
       - db
     ports:
-      - "5000:8080" # Redirige le port 5000 pour accéder à l'application
+      - "5065:8080" # Redirige le port 5000 pour accéder à l'application
     environment:
       ConnectionStrings__DefaultConnection: "Server=db;Database=PizzaDatabase;User=sa;Password=P@ssw0rd123!;Encrypt=True;TrustServerCertificate=True;"
       ASPNETCORE_ENVIRONMENT: Production
+      INIT_DB : true
     env_file:
       - secret.env
     networks:
