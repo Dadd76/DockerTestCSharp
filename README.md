@@ -216,6 +216,17 @@ apt-get update && apt-get install -y iputils-ping
 
 ##### nginx test
 docker run -d  -p 8880:80 nginx:alpine
+Tester la configuration de Nginx : Assurez-vous que la configuration de Nginx est correcte avec la commande suivante :
+
+bash
+Copier le code
+nginx -t
+Ensuite, redémarrez Nginx pour appliquer les nouvelles configurations :
+
+bash
+Copier le code
+systemctl restart nginx
+
 
 ###fichier host windows
 C:\Windows\System32\drivers\etc\hosts

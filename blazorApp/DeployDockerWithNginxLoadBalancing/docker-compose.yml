@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  app:
+    image: dotnet_app:latest
+    container_name: app1
+    build:
+      context: ..
+      dockerfile: DeployDockerWithNginx/Dockerfile
+    depends_on:
+      - db
+    # ports:
+    #   - "5000:8080" # Redirige le port 5000 pour accéder à l'application   
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=db;Database=PizzaDatabase;User=sa;Password=P@ssw0rd123!;Encrypt=True;TrustServerCertificate=True;"
+      ASPNETCORE_ENVIRONMENT: Production
+      INIT_DB : true
+    env_file:
+      - secret.env
+    networks:
+      - front_network
+      - back_network
+    command: ["printenv"]
+
+  app2:
+    image: dotnet_app:latest
+    container_name: app2
+    build:
+      context: ..
+      dockerfile: DeployDockerWithNginx/Dockerfile
+    depends_on:
+      - db
+    # ports:
+    #   - "5000:8080" # Redirige le port 5000 pour accéder à l'application
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=db;Database=PizzaDatabase;User=sa;Password=P@ssw0rd123!;Encrypt=True;TrustServerCertificate=True;"
+      ASPNETCORE_ENVIRONMENT: Production
+      INIT_DB : false
+    env_file:
+      - secret.env
+    networks:
+      - front_network
+      - back_network
+    command: ["printenv"]
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: db1
+    environment:
+      SA_PASSWORD: P@ssw0rd123!
+      ACCEPT_EULA: Y
+      MSSQL_LOGLEVEL: 4
+    env_file:
+      - secret.env
+    # volumes:
+    #   - db_data:/var/opt/mssql
+    ports:
+      - "1433:1433" # Optionnel, expose la base de données pour débogage ou accès externe
+    networks:
+      -  back_network
+    # command: ["/bin/bash", "-c", "printenv && sleep infinity"]
+
+  nginx:
+    image: nginx:1.27
+    volumes:
+      - nginx:/etc/nginx
+      - nginxHtml:/usr/share/nginx/html
+      #  - //wsl.localhost/docker-desktop/mnt/docker-desktop-disk/data/docker/volumes/DockerTestCSharp-cab16d7d7fbfe764c9b4643aa2dc40298734549aac415fecc7cae82c6d4b126d/_data/DockerTestCSharp/blazorApp/DeployDockerWithNginx/nginx/html:/usr/share/nginx/html
+      #  -./nginx/proxy.conf:/etc/nginx/conf.d/proxy.conf
+      #  - ./nginx/blazzorApp1.conf:/etc/nginx/conf.d/blazzorApp1.conf
+      #  -./nginx/blazzorApp2.conf:/etc/nginx/conf.d/blazzorApp2.conf
+    ports:
+      - "80:80"   # HTTP
+      - "443:443" # HTTP
+    depends_on:
+      - app
+    networks:
+      - front_network
+
+networks:
+  front_network:
+    driver: bridge
+  back_network:
+    driver: bridge
+
+volumes:
+  nginx:
+  nginxHtml:
