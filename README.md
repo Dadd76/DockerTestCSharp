@@ -123,18 +123,26 @@ https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=a
 \\wsl.localhost\docker-desktop\mnt\host\wsl\docker-desktop\shared-sockets\guest-services
 
 #### serveur SQL ODBC ####
+af06eea7c11d
 
-Docker exec -it <nom_du_conteneur> bash
+Docker exec -it af06eea7c11d bash
 /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P P@ssw0rd -c
 
-docker exec -it <db_container_name> /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P P@ssw0rd
+Docker exec -it <nom_du_conteneur> bash
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P P@ssw0rd -C -d PizzaDatabase
+
+docker exec -it <db_container_name> /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P P@ssw0rd -C
 
 #test du serveur sql 
 docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=P@ssw0rd' -p 1433:1433 --name test-mssql -d mcr.microsoft.com/mssql/server:2019-latest
 docker stop test-mssql
 docker stop test-mssql
 
+EXEC sp_configure 'remote access', 1;
+RECONFIGURE;
+GO
 
+faire la connection a partir de la fenetre et pas de l invite en haut de visual studio code
 #serveur SQL ODBC Driver 18
 
 https://learn.microsoft.com/fr-fr/sql/linux/quickstart-install-connect-docker?view=sql-server-ver16&tabs=cli&pivots=cs1-bash
@@ -208,6 +216,12 @@ apt-get update && apt-get install -y iputils-ping
 
 ##### nginx test
 docker run -d  -p 8880:80 nginx:alpine
+
+###fichier host windows
+C:\Windows\System32\drivers\etc\hosts
+127.0.0.1 blazorPizzza1.com
+127.0.0.1 blazorPizzza2.com
+
 
 
 
