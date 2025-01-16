@@ -252,8 +252,33 @@ exemple :
 
 2) utiliser le ctrl + F5 pour vérifier que les requetes sont bien réparties sur les deux instances app1 et app2 
 
+##Résolution erreur 
+Error: Unable to connect to the server with any of the available transports. Error: WebSockets failed: Error: WebSocket failed to connect. 
+The connection could not be found on the server, either the endpoint may not be a SignalR endpoint, the connection ID is not present on the server, 
+or there is a proxy blocking WebSockets. If you have multiple servers check that sticky sessions are enabled. ServerSentEvents failed: 
+Error: 'ServerSentEvents' does not support Binary. Error: LongPolling failed: Error: No Connection with that ID: Status code '404'
+
+Pourquoi cette erreur se produit ?
+SignalR nécessite des connexions persistantes :
+Lorsque Nginx redirige les requêtes de manière aléatoire (round-robin), il peut rediriger une requête SignalR vers un autre backend. Si la connexion SignalR initiale n'est plus disponible sur le backend cible, vous recevez une erreur 404.
+
+Transports multiples échouent :
+L'erreur indique que WebSockets, ServerSentEvents, et LongPolling ont tous échoué à établir une connexion stable avec le serveur.
 
 
+upstream blazor_backend {
+    ip_hash; # Associe une IP à un backend spécifique
+    server app1:8080;
+    server app2:8080;
+}
 
+##Résolution erreur autre solution 
+Optionnel : Utiliser des Sticky Sessions Basées sur des Cookies
+Si votre application a des utilisateurs derrière des NAT ou des proxys partagés (qui pourraient partager la même IP), vous pouvez configurer des sticky sessions basées sur des cookies au lieu des adresses IP :
 
-
+upstream blazor_backend {
+    server app1:8080;
+    server app2:8080;
+    sticky cookie srv_id expires=1h domain=blazorPizzza.com path=/;
+}
+Avec ces modifications, votre application Blazor utilisant SignalR devrait fonctionner correctement avec le load balancing derrière Nginx. Si vous rencontrez toujours des problèmes, faites un retour avec des détails supplémentaires ! 😊
