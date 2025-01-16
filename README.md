@@ -281,4 +281,4 @@ upstream blazor_backend {
     server app2:8080;
     sticky cookie srv_id expires=1h domain=blazorPizzza.com path=/;
 }
-Avec ces modifications, votre application Blazor utilisant SignalR devrait fonctionner correctement avec le load balancing derrière Nginx. Si vous rencontrez toujours des problèmes, faites un retour avec des détails supplémentaires ! 😊
+Avec ces modifications, votre application Blazor utilisant SignalR devrait fonctionner correctement avec le load balancing derrière Nginx. Si vous rencontrez toujours des problèmes, faites un retour avec des détails supplémentaires !
