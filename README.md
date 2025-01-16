@@ -227,11 +227,30 @@ bash
 Copier le code
 systemctl restart nginx
 
-
+##### nginx test load balancing
 ###fichier host windows
 C:\Windows\System32\drivers\etc\hosts
 127.0.0.1 blazorPizzza1.com
 127.0.0.1 blazorPizzza2.com
+
+##Test
+1) modifier le css d'un des deux site déployé pour les différencier 
+/app/wwwroot/css/site.css
+exemple : 
+/*app1*/ 
+.top-bar {
+    height: 5rem;
+    background-color: rgb(192,0,0); 
+    ....
+}
+/*app2*/ 
+.top-bar {
+    height: 5rem;
+    background-color: rgb(0, 19, 192); 
+    ....
+}
+
+2) utiliser le ctrl + F5 pour vérifier que les requetes sont bien réparties sur les deux instances app1 et app2 
 
 
 
