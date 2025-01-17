@@ -227,7 +227,7 @@ bash
 Copier le code
 systemctl restart nginx
 
-##### nginx test load balancing
+##### DeployDockerWithNginxLoadBalancing // nginx test load balancing
 ###fichier host windows
 C:\Windows\System32\drivers\etc\hosts
 127.0.0.1 blazorPizzza1.com
@@ -282,3 +282,15 @@ upstream blazor_backend {
     sticky cookie srv_id expires=1h domain=blazorPizzza.com path=/;
 }
 Avec ces modifications, votre application Blazor utilisant SignalR devrait fonctionner correctement avec le load balancing derrière Nginx. Si vous rencontrez toujours des problèmes, faites un retour avec des détails supplémentaires !
+
+##### DeployDockerWithNginxLoadBalancingAndDockerSwarm
+
+1) Lancez le déploiement avec Docker Swarm :
+docker stack deploy -c docker-compose.yml blazor_stack
+
+2) Vérifiez que les services sont en cours d’exécution :
+docker service ls
+
+3) Vérifiez les réplicas :
+docker service ps blazor_stack_app1
+docker service ps blazor_stack_app2
