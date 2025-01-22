@@ -3,7 +3,7 @@ version: '3.8'
 services:
   app:
     image: dotnet_app:latest
-    container_name: app1
+    # container_name: app1
     build:
       context: ..
       dockerfile: DeployDockerWithNginxLoadBalancing/Dockerfile
@@ -14,41 +14,27 @@ services:
     environment:
       ConnectionStrings__DefaultConnection: "Server=db;Database=PizzaDatabase;User=sa;Password=P@ssw0rd123!;Encrypt=True;TrustServerCertificate=True;"
       ASPNETCORE_ENVIRONMENT: Production
-      INIT_DB : true
+      INIT_DB : "true"
     env_file:
       - secret.env
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
     networks:
-      - front_network
-      - back_network
-    command: ["printenv"]
-
-  app2:
-    image: dotnet_app:latest
-    container_name: app2
-    build:
-      context: ..
-      dockerfile: DeployDockerWithNginxLoadBalancing/Dockerfile
-    depends_on:
-      - db
-    # ports:
-    #   - "5000:8080" # Redirige le port 5000 pour accéder à l'application
-    environment:
-      ConnectionStrings__DefaultConnection: "Server=db;Database=PizzaDatabase;User=sa;Password=P@ssw0rd123!;Encrypt=True;TrustServerCertificate=True;"
-      ASPNETCORE_ENVIRONMENT: Production
-      INIT_DB : false
-    env_file:
-      - secret.env
-    networks:
-      - front_network
-      - back_network
+      - front_network_overlay
+      - back_network_overlay
     command: ["printenv"]
 
   db:
     image: mcr.microsoft.com/mssql/server:2019-latest
-    container_name: db1
+    # container_name: db1
     environment:
       SA_PASSWORD: P@ssw0rd123!
-      ACCEPT_EULA: Y
+      ACCEPT_EULA: "Y"
       MSSQL_LOGLEVEL: 4
     env_file:
       - secret.env
@@ -56,8 +42,11 @@ services:
     #   - db_data:/var/opt/mssql
     ports:
       - "1433:1433" # Optionnel, expose la base de données pour débogage ou accès externe
+    deploy:
+      restart_policy:
+        condition: on-failure
     networks:
-      -  back_network
+      -  back_network_overlay
     # command: ["/bin/bash", "-c", "printenv && sleep infinity"]
 
   nginx:
@@ -74,14 +63,18 @@ services:
       - "443:443" # HTTP
     depends_on:
       - app
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
     networks:
-      - front_network
+      - front_network_overlay
 
 networks:
-  front_network:
-    driver: bridge
-  back_network:
-    driver: bridge
+  front_network_overlay:
+    driver: overlay
+  back_network_overlay:
+    driver: overlay
 
 volumes:
   nginx:

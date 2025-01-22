@@ -294,3 +294,33 @@ docker service ls
 3) Vérifiez les réplicas :
 docker service ps blazor_stack_app1
 docker service ps blazor_stack_app2
+
+Étape 6 : Expérimenter avec Docker Swarm
+1. Mise à l'échelle des services :
+Augmentez le nombre de réplicas d’un service :
+
+bash
+Copier
+Modifier
+docker service scale blazor_stack_app1=3
+2. Rolling updates :
+Effectuez une mise à jour du service :
+
+bash
+Copier
+Modifier
+docker service update --image dotnet_app:new_version blazor_stack_app1
+3. Simuler une panne :
+Arrêtez une instance et observez le redémarrage automatique :
+
+bash
+Copier
+Modifier
+docker stop <container_id>
+7) Nettoyer l'environnement
+Pour supprimer la stack :
+docker stack rm blazor_stack
+Pour quitter le mode Swarm :
+docker swarm leave --force
+
+Redis (optionnel) : Permet de centraliser l'état de session.

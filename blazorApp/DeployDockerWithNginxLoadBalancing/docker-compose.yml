@@ -20,13 +20,7 @@ services:
     networks:
       - front_network
       - back_network
-    deploy:
-      replicas: 2
-      update_config:
-        parallelism: 1
-        delay: 10s
-      restart_policy:
-        condition: on-failure
+    
     command: ["printenv"]
 
   app2:
@@ -48,13 +42,6 @@ services:
     networks:
       - front_network
       - back_network
-    deploy:
-      replicas: 2
-      update_config:
-        parallelism: 1
-        delay: 10s
-      restart_policy:
-        condition: on-failure
     command: ["printenv"]
 
   db:
@@ -72,9 +59,6 @@ services:
       - "1433:1433" # Optionnel, expose la base de données pour débogage ou accès externe
     networks:
       -  back_network
-    deploy:
-      restart_policy:
-        condition: on-failure
     # command: ["/bin/bash", "-c", "printenv && sleep infinity"]
 
   nginx:
