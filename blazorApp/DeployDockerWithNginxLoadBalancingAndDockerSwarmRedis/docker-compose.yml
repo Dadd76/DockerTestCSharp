@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  app:
+    image: dotnet_app:latest
+    build:
+      context: ..
+      dockerfile: DeployDockerWithNginxLoadBalancing/Dockerfile
+    depends_on:
+      - db
+      - redis
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=db;Database=PizzaDatabase;User=sa;Password=P@ssw0rd123!;Encrypt=True;TrustServerCertificate=True;"
+      ASPNETCORE_ENVIRONMENT: Production
+      INIT_DB: "true"
+      REDIS_CONNECTION: "redis:6379" # Redis connection string for SignalR backplane
+    env_file:
+      - secret.env
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+    networks:
+      - front_network_overlay
+      - back_network_overlay
+    command: ["printenv"]
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: P@ssw0rd123!
+      ACCEPT_EULA: "Y"
+      MSSQL_LOGLEVEL: 4
+    env_file:
+      - secret.env
+    ports:
+      - "1433:1433" # Optionnel, expose la base de données pour débogage ou accès externe
+    deploy:
+      restart_policy:
+        condition: on-failure
+    networks:
+      - back_network_overlay
+
+  nginx:
+    image: nginx:1.27
+    volumes:
+      - nginx:/etc/nginx
+      - nginxHtml:/usr/share/nginx/html
+    ports:
+      - "80:80"   # HTTP
+      - "443:443" # HTTP
+    depends_on:
+      - app
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - front_network_overlay
+
+  redis:
+    image: redis:alpine
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - back_network_overlay
+    ports:
+      - "6379:6379" # Optionnel : expose Redis pour débogage ou accès externe
+
+networks:
+  front_network_overlay:
+    driver: overlay
+  back_network_overlay:
+    driver: overlay
+
+volumes:
+  nginx:
+  nginxHtml:

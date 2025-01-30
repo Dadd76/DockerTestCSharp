@@ -3,10 +3,28 @@ using BlazingPizza.Data;
 using BlazingPizza.Services;
 using BlazingPizza;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
+
 
 var builder = WebApplication.CreateBuilder(args);
 // Ajouter les variables d'environnement
 builder.Configuration.AddEnvironmentVariables();
+
+// Ajout de SignalR avec Redis comme backplane
+builder.Services.AddSignalR()
+    .AddStackExchangeRedis(options =>
+    {
+        var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
+        if (redisConnectionString != null)
+        {
+            options.Configuration = StackExchange.Redis.ConfigurationOptions.Parse(redisConnectionString);
+        }
+        else
+        {
+            throw new InvalidOperationException("Redis connection string is not configured.");
+        }
+        options.Configuration.ClientName = "SignalRBackplane:";
+    });
 
 
 builder.Logging.AddConsole();
@@ -15,6 +33,11 @@ builder.Logging.SetMinimumLevel(LogLevel.Debug);
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+// app.MapBlazorHub(); // Configure le hub Blazor pour les communications temps réel
+// app.MapHub<PizzaOrderHub>("/orderHub"); // Route personnalisée pour un Hub SignalR (ex : gestion des commandes)
+// app.MapFallbackToPage("/_Host");
+
 
 //AddHttpClient permet à l’application d’accéder aux commandes HTTP. L’application utilise un HttpClient pour obtenir le JSON pour les pizzas spéciales
 builder.Services.AddHttpClient();
@@ -42,6 +65,8 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<OrderState>();
 
 var app = builder.Build();
+
+app.MapHub<OrderUpdatesHub>("/orderUpdatesHub");
 
 // Initialize the database
 var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();

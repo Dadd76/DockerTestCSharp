@@ -317,6 +317,7 @@ bash
 Copier
 Modifier
 docker stop <container_id>
+
 7) Nettoyer l'environnement
 Pour supprimer la stack :
 docker stack rm blazor_stack
@@ -324,3 +325,45 @@ Pour quitter le mode Swarm :
 docker swarm leave --force
 
 Redis (optionnel) : Permet de centraliser l'état de session.
+
+##### test web socket 
+Voici quelques outils populaires pour effectuer un test d'écho WebSocket
+
+Site Web de WebSocket.org (outil en ligne) :
+
+Accédez à WebSocket Echo Test.
+Ce site propose une interface simple pour tester les connexions WebSocket en direct depuis un navigateur.
+Comment l'utiliser :
+
+Entrez l'URL de votre serveur WebSocket dans le champ (par exemple, ws://your-server-address).
+Cliquez sur "Connect".
+Envoyez un message dans le champ de texte et cliquez sur "Send".
+Si tout fonctionne correctement, vous devriez voir le message renvoyé par le serveur.
+Outils CLI comme wscat (outil en ligne de commande) :
+
+Vous pouvez utiliser un outil comme wscat pour tester les WebSockets depuis la ligne de commande.
+Installation :
+
+bash
+Copier
+Modifier
+npm install -g wscat
+Utilisation :
+
+bash
+Copier
+Modifier
+wscat -c ws://your-server-address
+Après connexion, tapez un message pour tester le fonctionnement.
+Navigateurs modernes (Console de développeur) :
+
+La plupart des navigateurs supportent les WebSockets.
+Vous pouvez tester les connexions via des scripts dans la console JavaScript du navigateur :
+javascript
+Copier
+Modifier
+const socket = new WebSocket('ws://blazorpizzza1.com');
+socket.onopen = () => console.log('Connected');
+socket.onmessage = (event) => console.log('Message from server:', event.data);
+socket.onerror = (error) => console.error('WebSocket error:', error);
+socket.onclose = () => console.log('Disconnected');
