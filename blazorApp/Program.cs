@@ -9,25 +9,26 @@ using Microsoft.AspNetCore.SignalR;
 var builder = WebApplication.CreateBuilder(args);
 // Ajouter les variables d'environnement
 builder.Configuration.AddEnvironmentVariables();
+builder.Logging.AddConsole();
 
 // Ajout de SignalR avec Redis comme backplane
-builder.Services.AddSignalR()
-    .AddStackExchangeRedis(options =>
-    {
-        var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
-        if (redisConnectionString != null)
-        {
-            options.Configuration = StackExchange.Redis.ConfigurationOptions.Parse(redisConnectionString);
-        }
-        else
-        {
-            throw new InvalidOperationException("Redis connection string is not configured.");
-        }
-        options.Configuration.ClientName = "SignalRBackplane:";
-    });
+// builder.Services.AddSignalR()
+//     .AddStackExchangeRedis(options =>
+//     {
+//         var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
+//         Console.WriteLine("redisConnectionString :" + redisConnectionString);
+//         if (redisConnectionString != null)
+//         {
+//             options.Configuration = StackExchange.Redis.ConfigurationOptions.Parse(redisConnectionString);
+//         }
+//         else
+//         {
+//             throw new InvalidOperationException("Redis connection string is not configured.");
+//         }
+//         options.Configuration.ClientName = "SignalRBackplane:";
+//     });
 
 
-builder.Logging.AddConsole();
 builder.Logging.SetMinimumLevel(LogLevel.Debug);
 
 // Add services to the container.
@@ -77,6 +78,7 @@ if (app.Environment.IsDevelopment())
 }
 
 var initDb = Environment.GetEnvironmentVariable("INIT_DB");
+Console.WriteLine($"Environment: {builder.Environment.EnvironmentName}");
 
 using (var scope = scopeFactory.CreateScope())
 {
@@ -87,7 +89,6 @@ using (var scope = scopeFactory.CreateScope())
         SeedData.Initialize(db);
     }
 }
-
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -99,14 +100,10 @@ if (!app.Environment.IsDevelopment())
 else 
 {
     Console.WriteLine("Développement !!");
-
 }
 
-
 app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
-
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
 app.UseAntiforgery();
 
@@ -114,5 +111,3 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
 app.Run();
-
-
