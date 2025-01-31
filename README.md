@@ -126,7 +126,7 @@ https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=a
 af06eea7c11d
 
 Docker exec -it af06eea7c11d bash
-/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P P@ssw0rd -c
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P P@ssw0rd -C
 
 Docker exec -it <nom_du_conteneur> bash
 /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P P@ssw0rd -C -d PizzaDatabase

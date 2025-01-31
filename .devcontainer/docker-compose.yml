@@ -10,14 +10,15 @@ services:
       -  ../..:/workspaces:cached
       # - ../..:/workspaces
     environment:
-      ConnectionStrings__DefaultConnection : "Server=localhost,1433;Database=PizzaDatabase;User=sa;Password=P@ssw0rd;Encrypt=True;TrustServerCertificate=True;"
-      ASPNETCORE_ENVIRONMENT: Development
-
+      ConnectionStrings__DefaultConnection : "Server=db,1433;Database=PizzaDatabase;User=sa;Password=P@ssw0rd;Encrypt=True;TrustServerCertificate=True;"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      REDIS_CONNECTION: "redis:6379" 
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
     # networks : dockertestcsharp_dev
     # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
-    network_mode: service:db
+    networks:
+      - dev_network
 
     # Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
     # user: root
@@ -33,13 +34,20 @@ services:
       ACCEPT_EULA: Y
     ports:
       - "1433:1433"
+    networks:
+      - dev_network
     # networks : dockertestcsharp_dev
     # Add "forwardPorts": ["db:1433"] to **devcontainer.json** to forward MSSQL locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
     
-    # redis:
-    #   image: redis:alpine
-    #   ports:
-    #     - "6379:6379" # Optionnel : expose Redis pour débogage ou accès externe
-# networks : 
-#   dockertestcsharp_dev :
+  redis:
+      image: redis:alpine
+      restart: unless-stopped
+      ports:
+        - "6379:6379" # Optionnel : pour tester Redis en local
+      networks:
+        - dev_network #  Ajout d'un réseau pour Redis
+
+networks:
+  dev_network: #  Réseau personnalisé pour Redis et l'application
+    driver: bridge
