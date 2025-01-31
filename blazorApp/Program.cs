@@ -3,7 +3,7 @@ using BlazingPizza.Data;
 using BlazingPizza.Services;
 using BlazingPizza;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.SignalR;
+//using Microsoft.AspNetCore.SignalR;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -67,7 +67,7 @@ builder.Services.AddScoped<OrderState>();
 
 var app = builder.Build();
 
-app.MapHub<OrderUpdatesHub>("/orderUpdatesHub");
+//app.MapHub<OrderUpdatesHub>("/orderUpdatesHub");
 
 // Initialize the database
 var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
