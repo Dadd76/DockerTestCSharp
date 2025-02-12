@@ -5,6 +5,12 @@ VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "blazorApp", "blazorApp\blazorApp.csproj", "{A6D65818-2263-4B82-B4FF-460C45E34BBC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "blazorSignalR", "blazorSignalR", "{4FB04922-5C72-4246-AE17-8D8B693744FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "blazorSignalR", "blazorSignalR\blazorSignalR\blazorSignalR.csproj", "{194F7982-839E-4790-8F61-42A93FF04F1F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "blazorSignalR.Client", "blazorSignalR\blazorSignalR.Client\blazorSignalR.Client.csproj", "{03063AF2-5102-4E25-AA7E-D6367689DCAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,11 +21,23 @@ Global
 		{A6D65818-2263-4B82-B4FF-460C45E34BBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6D65818-2263-4B82-B4FF-460C45E34BBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6D65818-2263-4B82-B4FF-460C45E34BBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{194F7982-839E-4790-8F61-42A93FF04F1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{194F7982-839E-4790-8F61-42A93FF04F1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{194F7982-839E-4790-8F61-42A93FF04F1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{194F7982-839E-4790-8F61-42A93FF04F1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03063AF2-5102-4E25-AA7E-D6367689DCAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03063AF2-5102-4E25-AA7E-D6367689DCAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03063AF2-5102-4E25-AA7E-D6367689DCAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03063AF2-5102-4E25-AA7E-D6367689DCAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F1F5112B-0F80-438C-B2B6-06F065EAF331}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{194F7982-839E-4790-8F61-42A93FF04F1F} = {4FB04922-5C72-4246-AE17-8D8B693744FE}
+		{03063AF2-5102-4E25-AA7E-D6367689DCAF} = {4FB04922-5C72-4246-AE17-8D8B693744FE}
 	EndGlobalSection
 EndGlobal

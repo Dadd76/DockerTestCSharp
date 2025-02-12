@@ -5,6 +5,28 @@
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "app",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+	// Ajout explicite du support .NET
+	// "features": {
+	// 	"ghcr.io/devcontainers/features/dotnet:1": {
+	// 		"version": "9.0"
+	// 	},
+	// 	"ghcr.io/devcontainers/features/github-cli:1": {
+	// 		"installDirectlyFromGitHubRelease": true,
+	// 		"version": "latest"
+	// 	},
+	// 	"ghcr.io/nikiforovall/devcontainer-features/dotnet-csharpier:1": {}
+	// },
+
+
+
+
+
+
+	// "name": "C# (.NET) and MS SQL",
+	// "dockerComposeFile": "docker-compose.yml",
+	// "service": "app",
+	// "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 	// "forwardPorts": ["db:1433"],
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -28,10 +50,10 @@
 					}
 				]
 			},
-			
 			// Add the IDs of extensions you want installed when the container is created.
 			"extensions": [
 				"ms-dotnettools.csharp",
+				"ms-dotnettools.csdevkit",
 				"ms-mssql.mssql",
 				"alexcvzz.vscode-sqlite"
 			]

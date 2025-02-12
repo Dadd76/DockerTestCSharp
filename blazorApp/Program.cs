@@ -28,6 +28,10 @@ builder.Logging.AddConsole();
 //         options.Configuration.ClientName = "SignalRBackplane:";
 //     });
 
+if (builder.Environment.IsStaging())
+{
+    builder.WebHost.UseStaticWebAssets();
+}
 
 builder.Logging.SetMinimumLevel(LogLevel.Debug);
 

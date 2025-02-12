@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/blazorSignalR.Client.props" />
+</Project>
